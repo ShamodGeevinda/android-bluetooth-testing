@@ -29,5 +29,36 @@
         android:padding="15dp"
         android:src="@drawable/ic_action_search" />
 
+    <EditText
+        android:id="@+id/data"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chatname"
+        android:layout_marginTop="50dp"
+        android:hint="Enter your message"
+
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:id="@+id/send_bt"
+        android:layout_toRightOf="@+id/data"
+        android:layout_below="@id/connect_bt"
+        />
+
+    <TextView
+        android:id="@+id/incommingMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/data"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="16dp"
+        android:text="Incomming messages" />
+
 
 </RelativeLayout>

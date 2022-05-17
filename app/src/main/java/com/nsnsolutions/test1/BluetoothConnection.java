@@ -7,7 +7,10 @@ import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,9 +33,10 @@ public class BluetoothConnection {
     ProgressDialog mProgressDialog;
 
     private ConnectedThread mConnectedThread;
-    public BluetoothConnection(Context context, BluetoothAdapter bluetoothAdapter) {
+    public BluetoothConnection(Context context) {
         mContext = context;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        start();
     }
 
     private class AcceptThread extends Thread{
@@ -151,13 +155,17 @@ public class BluetoothConnection {
         private final OutputStream moutputStream;
 
 
-        public ConnectedThread(BluetoothSocket socket) {
+        public ConnectedThread (BluetoothSocket socket) {
+            Log.d(TAG, "ConnectedThread: Starting.");
             mSocket = socket;
             InputStream tempIn = null;
             OutputStream tempOut = null;
 
             // dismiss the progress dialog box when connection is established
-            mProgressDialog.dismiss();
+            try {
+                mProgressDialog.dismiss();
+            }catch (NullPointerException e){}
+
             try {
                 tempIn = mSocket.getInputStream();
                 tempOut = mSocket.getOutputStream();
@@ -172,7 +180,11 @@ public class BluetoothConnection {
             while(true){
                 try{
                     bytes = mInputstream.read(buffer);
-                    String incommingMsg = new String(buffer, 0 , bytes);
+                    String incommingMessage = new String(buffer, 0 , bytes);
+
+                    Intent incommingMsgIntent = new Intent("incommingMessage");
+                    incommingMsgIntent.putExtra("theMessage", incommingMessage);
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(incommingMsgIntent);
                 }catch (IOException e){}
                     break;
             }

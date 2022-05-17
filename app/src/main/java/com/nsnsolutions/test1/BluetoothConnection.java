@@ -10,6 +10,9 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 public class BluetoothConnection {
@@ -26,6 +29,7 @@ public class BluetoothConnection {
     private UUID deviceUUID;
     ProgressDialog mProgressDialog;
 
+    private ConnectedThread mConnectedThread;
     public BluetoothConnection(Context context, BluetoothAdapter bluetoothAdapter) {
         mContext = context;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -114,6 +118,8 @@ public class BluetoothConnection {
 
     }
 
+
+
     // Start the chat service Specially start AcceptThread to begin a session in listening (server) mode. Called by the Activity onResume()
     public synchronized void start(){
 
@@ -137,5 +143,68 @@ public class BluetoothConnection {
 
         mConnectThread = new ConnectThread(device, uuid);
         mConnectThread.start();
+    }
+
+    public class ConnectedThread extends Thread{
+        private final BluetoothSocket mSocket;
+        private final InputStream mInputstream;
+        private final OutputStream moutputStream;
+
+
+        public ConnectedThread(BluetoothSocket socket) {
+            mSocket = socket;
+            InputStream tempIn = null;
+            OutputStream tempOut = null;
+
+            // dismiss the progress dialog box when connection is established
+            mProgressDialog.dismiss();
+            try {
+                tempIn = mSocket.getInputStream();
+                tempOut = mSocket.getOutputStream();
+            } catch (IOException e){}
+            mInputstream = tempIn;
+            moutputStream = tempOut;
+        }
+
+        public void run(){
+            byte[] buffer = new byte[1024]; // buffer store for the stream
+            int bytes;
+            while(true){
+                try{
+                    bytes = mInputstream.read(buffer);
+                    String incommingMsg = new String(buffer, 0 , bytes);
+                }catch (IOException e){}
+                    break;
+            }
+        }
+
+        // Call this from the main activity to sned data to the remote device
+        public void write(byte[] bytes){
+            try {
+                String text = new String (bytes, Charset.defaultCharset());
+                moutputStream.write(bytes);
+            }catch (IOException e){
+
+            }
+
+        }
+        // call this from the main activity to shutdown the connection
+        public void cancel(){
+            try{
+                mSocket.close();
+            }catch(IOException w){}
+        }
+    }
+
+    private void connected(BluetoothSocket mSocket, BluetoothDevice mDevice) {
+        // start the thread to manage the connection and perform transmissions
+        mConnectedThread = new ConnectedThread(mSocket);
+        mConnectedThread.start();
+    }
+
+    // write to the connected thread
+    public  void  write(byte[] out){
+        ConnectedThread r;
+        mConnectedThread.write(out);
     }
 }

@@ -22,7 +22,8 @@ public class PairView extends AppCompatActivity {
     BluetoothAdapter bluetoothAdapter;
     ArrayAdapter<String> arrayAdapter;
     ArrayList arrayList = new ArrayList();
-    Set<BluetoothDevice> availableDevices;
+
+    Set<BluetoothDevice> availableDevices ;
     ListView pairList;
     Button pair_bt;
 
@@ -33,27 +34,22 @@ public class PairView extends AppCompatActivity {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         pairList = findViewById(R.id.pairlist_view);
         pair_bt = findViewById(R.id.pairSearch_bt);
+
         //availableDevices = bluetoothAdapter.startDiscovery();
         //bluetoothAdapter.startDiscovery();
+
         arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_expandable_list_item_1, arrayList);
         pairList.setAdapter(arrayAdapter);
 
 
-//        pair_bt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                list();
-//
-//            }
-//        });
+
 
     }
 
 
     public void discoverDevices(View v) {
         bluetoothAdapter.startDiscovery();
-        //list();
+
 
     }
 
@@ -64,9 +60,38 @@ public class PairView extends AppCompatActivity {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+                //
+//                try {
+//                    availableDevices.add(device);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//                try {
+//                    if( availableDevices.size()>0){
+//                        for (BluetoothDevice bt : availableDevices) {
+//
+//                            arrayList.add(bt.getName());
+//                            arrayAdapter.notifyDataSetChanged();
+//
+//
+//                        }
+//
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+
                 //availableDevices.add(device);
-                arrayList.add(device.getName());
-                arrayAdapter.notifyDataSetChanged();
+                if(arrayList.contains(device.getName())){}
+                else {
+
+                    arrayList.add(device.getName());
+                    arrayAdapter.notifyDataSetChanged();
+                    //arrayList.clear();
+                }
             }
         }
     };
@@ -84,8 +109,10 @@ public class PairView extends AppCompatActivity {
         final ArrayList list = new ArrayList();
         final ArrayList<BluetoothDevice> devices = new ArrayList<BluetoothDevice>();
         for (BluetoothDevice bt : availableDevices) {
-            list.add(bt.getName());
-            devices.add(bt);
+            if(devices.contains(bt)){}else {
+                arrayList.add(bt.getName());
+                devices.add(bt);
+            }
 
         }
     }

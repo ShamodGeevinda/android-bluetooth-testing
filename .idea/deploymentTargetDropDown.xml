@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
+    <targetSelectedWithDropDown>
+      <Target>
+        <type value="QUICK_BOOT_TARGET" />
+        <deviceKey>
+          <Key>
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\ASUS\.android\avd\Pixel_2_API_27.avd" />
+          </Key>
+        </deviceKey>
+      </Target>
+    </targetSelectedWithDropDown>
+    <timeTargetWasSelectedWithDropDown value="2022-05-18T00:43:30.270696600Z" />
     <multipleDevicesSelectedInDropDown value="true" />
     <runningDeviceTargetsSelectedWithDialog>
       <Target>
@@ -8,7 +20,7 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
-            <value value="adb-RF8R912ZH0T-NZzBqX._adb-tls-connect._tcp." />
+            <value value="RF8R912ZH0T" />
           </Key>
         </deviceKey>
       </Target>

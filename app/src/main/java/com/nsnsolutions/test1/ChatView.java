@@ -27,14 +27,14 @@ import java.util.Set;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
-public class ChatView extends AppCompatActivity  implements Serializable{
+public class ChatView extends AppCompatActivity  {
 
     TextView chatName;
     BluetoothDevice device, mBTDevice;
     ImageView connectBt;
     Button btnSend;
     EditText etSend;
-    TextView incommingMessage;
+    TextView incommingMessages;
     StringBuilder messages;
 
     private static final UUID MY_UUID_INSECURE =
@@ -54,7 +54,7 @@ public class ChatView extends AppCompatActivity  implements Serializable{
         btnSend = findViewById(R.id.send_bt);
         etSend = findViewById(R.id.data);
 
-        incommingMessage = (TextView)findViewById(R.id.incommingMessage) ;
+        incommingMessages = (TextView)findViewById(R.id.incommingMessage) ;
         messages = new StringBuilder();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incommingMessage"));
 
@@ -101,7 +101,7 @@ public class ChatView extends AppCompatActivity  implements Serializable{
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("theMessage");
             messages.append(text+ "\n");
-            incommingMessage.setText(messages);
+            incommingMessages.setText(messages);
         }
     };
 
